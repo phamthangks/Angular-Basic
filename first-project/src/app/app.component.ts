@@ -9,15 +9,15 @@ import { HeaderLayoutComponent } from './shared/header-layout/header-layout.comp
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  //Text
-  title = {
-    name: 'first-project',
-    old: 2024,
-  };
+  nameBtn = 'Click Me!';
 
-  //Properties
-  isDisabled = false;
+  clickMessage = '';
 
-  //Atributes
-  contentImage = 'Hi Thang'
+  handleClickMe():void {
+    this.clickMessage = 'Button is clicked!';
+  }
+
+  updateField():void {
+    console.log('Input is changed');
+  }
 }

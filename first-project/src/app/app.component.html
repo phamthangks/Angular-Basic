@@ -1,11 +1,11 @@
 <main class="main">
   <header-layout />
-  <div>{{ title.name }}</div>
-  <div>{{ title.old + 2025 }}</div>
+  <h1>Click is an event</h1>
+  <button (click)="handleClickMe()">{{ nameBtn }}</button>
 
-  <button [disabled]="isDisabled">Click Me</button>
+  <div>Message : {{ clickMessage }}</div>
 
-  <img src="assets/images/shopping-cart.png" alt="Angular {{ contentImage }}" width="100px" height="100px">
+  <input type="text" (keyup)="updateField()"/>
 </main>
 
 <router-outlet />
