@@ -12,12 +12,14 @@
       <div class="body-cart">
         <div class="row-cart" *ngFor="let product of products">
           <div class="col-1">
-            <img
+           <a [routerLink]="['/detail', product.id]">
+             <img
               width="60px"
               height="auto"
               src="{{ product.image }}"
               alt="SambaOG"
             />
+           </a>
           </div>
           <div class="col-2">{{ product.name| upperCasePipe }}</div>
           <div class="col-3">{{ product.price| currencyPipe }}</div>
