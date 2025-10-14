@@ -33,4 +33,11 @@ export class HomeComponent {
   updateField():void {
     console.log('Input is changed');
   }
+
+  handleDelete = (id: number) => {
+    const productIndex = this.products.findIndex(item => item.id === id);
+    if(productIndex !== -1) {
+      this.products.splice(productIndex, 1);
+    }
+  }
 }
