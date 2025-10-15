@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductItems } from '../shared/types/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
@@ -11,7 +11,7 @@ import { ProductItemComponent } from '../shared/product-item/productItem.compone
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, DoCheck {
   nameBtn = 'Click Me!';
 
   clickMessage = '';
@@ -36,7 +36,9 @@ export class HomeComponent implements OnInit {
     console.log('Initalize Component 2');
   }
 
- 
+ ngDoCheck(): void {
+   console.log('Check Component');
+ }
 
   handleClickMe():void {
     this.clickMessage = 'Button is clicked!';
@@ -47,9 +49,10 @@ export class HomeComponent implements OnInit {
   }
 
   handleDelete = (id: number) => {
-    const productIndex = this.products.findIndex(item => item.id === id);
-    if(productIndex !== -1) {
-      this.products.splice(productIndex, 1);
-    }
+    // const productIndex = this.products.findIndex(item => item.id === id);
+    // if(productIndex !== -1) {
+    //   this.products.splice(productIndex, 1);
+    // }
+    this.products = this.products.filter(item => item.id !== id);
   }
 }
