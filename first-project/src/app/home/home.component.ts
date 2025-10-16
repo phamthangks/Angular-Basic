@@ -2,12 +2,13 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductItems } from '../shared/types/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
+import { NgIf } from '@angular/common';
 
 
 @Component({
   selector: 'app-home',
   standalone:true,
-  imports: [RouterOutlet, ProductItemComponent],
+  imports: [RouterOutlet, ProductItemComponent, NgIf],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -17,6 +18,8 @@ export class HomeComponent implements OnInit, DoCheck {
   clickMessage = '';
 
   bindingMessage = '';
+
+  isVisible = true;
 
   products : ProductItems[] = [
     {id: 1, name: 'samba og', price: 400000, image: 'assets/images/shoe1.png'},
@@ -54,5 +57,9 @@ export class HomeComponent implements OnInit, DoCheck {
     //   this.products.splice(productIndex, 1);
     // }
     this.products = this.products.filter(item => item.id !== id);
+  }
+
+  handleChangeVisible = () => {
+    this.isVisible = !this.isVisible;
   }
 }

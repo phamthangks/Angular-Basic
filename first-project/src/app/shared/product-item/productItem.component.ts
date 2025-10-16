@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { CurrencyPipe } from "../pipes/CurrentcyPipe.pipe";
@@ -13,7 +13,7 @@ import { ProductItems } from "../types/productItem";
   templateUrl: './productItem.component.html',
   styleUrl: './productItem.component.css'
 })
-export class ProductItemComponent implements OnChanges{
+export class ProductItemComponent implements OnChanges, OnDestroy{
     @Input() products : ProductItems[] = [];
 
     @Output() dataEvent = new EventEmitter<number>();
@@ -29,6 +29,10 @@ export class ProductItemComponent implements OnChanges{
     ngOnChanges(changes: SimpleChanges): void {
       console.log(changes['products'].currentValue);
       console.log(changes['products'].previousValue);
+    }
+
+    ngOnDestroy(): void {
+      console.log('Component is removed from the DOM');
     }
 
     handleDelete = (id: number) => {
