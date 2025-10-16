@@ -3,14 +3,14 @@ import { RouterOutlet } from '@angular/router';
 import { ProductItems } from '../shared/types/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
 import { NgIf } from '@angular/common';
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
-  standalone:true,
+  standalone: true,
   imports: [RouterOutlet, ProductItemComponent, NgIf],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, DoCheck {
   nameBtn = 'Click Me!';
@@ -21,33 +21,52 @@ export class HomeComponent implements OnInit, DoCheck {
 
   isVisible = true;
 
-  products : ProductItems[] = [
-    {id: 1, name: 'samba og', price: 400000, image: 'assets/images/shoe1.png'},
-    {id: 2, name: 'nike f1', price: 500000, image: 'assets/images/shoe1.png'},
-    {id: 3, name: 'addidas f2', price: 600000, image: 'assets/images/shoe1.png'},
-    {id: 4, name: 'mlb f3', price: 700000, image: 'assets/images/shoe1.png'},
+  products: ProductItems[] = [
+    {
+      id: 1,
+      name: 'samba og',
+      price: 400000,
+      image: 'assets/images/shoe1.png',
+    },
+    { id: 2, name: 'nike f1', price: 500000, image: 'assets/images/shoe1.png' },
+    {
+      id: 3,
+      name: 'addidas f2',
+      price: 600000,
+      image: 'assets/images/shoe1.png',
+    },
+    { id: 4, name: 'mlb f3', price: 700000, image: 'assets/images/shoe1.png' },
   ];
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     console.log('Initalize Component 1');
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-      .then(response => response.json())
-      .then(json => console.log(json))
+    this.http
+      .get<any>('https://ninedev-api.vercel.app/blogs')
+      .subscribe(({ data, message }) => {
+        this.products = data.map((item: any) => {
+          return {
+            ...item,
+            name: item.title,
+            price: Number(item.body),
+            image: 'assets/images/shoe1.png',
+          };
+        });
+      });
   }
 
-  constructor() {
+  constructor(private http: HttpClient) {
     console.log('Initalize Component 2');
   }
 
- ngDoCheck(): void {
-   console.log('Check Component');
- }
+  ngDoCheck(): void {
+    console.log('Check Component');
+  }
 
-  handleClickMe():void {
+  handleClickMe(): void {
     this.clickMessage = 'Button is clicked!';
   }
 
-  updateField():void {
+  updateField(): void {
     console.log('Input is changed');
   }
 
@@ -56,10 +75,10 @@ export class HomeComponent implements OnInit, DoCheck {
     // if(productIndex !== -1) {
     //   this.products.splice(productIndex, 1);
     // }
-    this.products = this.products.filter(item => item.id !== id);
-  }
+    this.products = this.products.filter((item) => item.id !== id);
+  };
 
   handleChangeVisible = () => {
     this.isVisible = !this.isVisible;
-  }
+  };
 }
