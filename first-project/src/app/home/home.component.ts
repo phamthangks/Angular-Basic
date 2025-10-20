@@ -4,6 +4,7 @@ import { ProductItems } from '../shared/types/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { BlogService } from '../../services/BlogService';
 
 @Component({
   selector: 'app-home',
@@ -40,21 +41,19 @@ export class HomeComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     console.log('Initalize Component 1');
-    this.http
-      .get<any>('https://ninedev-api.vercel.app/blogs')
-      .subscribe(({ data, message }) => {
-        this.products = data.map((item: any) => {
-          return {
-            ...item,
-            name: item.title,
-            price: Number(item.body),
-            image: 'assets/images/shoe1.png',
-          };
-        });
+    this.blogService.getBlogs().subscribe(({ data, message }) => {
+      this.products = data.map((item: any) => {
+        return {
+          ...item,
+          name: item.title,
+          price: Number(item.body),
+          image: 'assets/images/shoe1.png',
+        };
       });
+    });
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private blogService: BlogService) {
     console.log('Initalize Component 2');
   }
 
