@@ -1,10 +1,11 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductItems } from '../shared/types/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BlogService } from '../../services/BlogService';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ import { BlogService } from '../../services/BlogService';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit, DoCheck {
+export class HomeComponent implements OnInit, DoCheck, OnDestroy {
   nameBtn = 'Click Me!';
 
   clickMessage = '';
@@ -21,6 +22,8 @@ export class HomeComponent implements OnInit, DoCheck {
   bindingMessage = '';
 
   isVisible = true;
+
+  getBlogApi: Subscription;
 
   products: ProductItems[] = [
     {
@@ -41,7 +44,7 @@ export class HomeComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     console.log('Initalize Component 1');
-    this.blogService.getBlogs().subscribe(({ data, message }) => {
+    this.getBlogApi = this.blogService.getBlogs().subscribe(({ data, message }) => {
       this.products = data.map((item: any) => {
         return {
           ...item,
@@ -55,6 +58,14 @@ export class HomeComponent implements OnInit, DoCheck {
 
   constructor(private blogService: BlogService) {
     console.log('Initalize Component 2');
+    this.getBlogApi = new Subscription();
+  }
+
+  ngOnDestroy(): void {
+    if (this.getBlogApi) {
+      this.getBlogApi.unsubscribe();
+      console.log('getBlogApi unsubscribed');
+    }
   }
 
   ngDoCheck(): void {
