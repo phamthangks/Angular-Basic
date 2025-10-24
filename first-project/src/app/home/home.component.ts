@@ -5,7 +5,7 @@ import { ProductItemComponent } from '../shared/product-item/productItem.compone
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BlogService } from '../../services/BlogService';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -44,15 +44,22 @@ export class HomeComponent implements OnInit, DoCheck, OnDestroy {
 
   ngOnInit(): void {
     console.log('Initalize Component 1');
-    this.getBlogApi = this.blogService.getBlogs().subscribe(({ data, message }) => {
-      this.products = data.map((item: any) => {
+    this.getBlogApi = this.blogService
+    .getBlogs()
+    .pipe(
+      map(({ data }) => 
+      data.map((item: any) => {
         return {
           ...item,
           name: item.title,
           price: Number(item.body),
           image: 'assets/images/shoe1.png',
         };
-      });
+      }).filter(product => product.price > 400000)
+    ),
+    )
+    .subscribe((res) => {
+      this.products = res;
     });
   }
 
